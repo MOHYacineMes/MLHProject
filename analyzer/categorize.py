@@ -6,30 +6,14 @@ elsewhere with pandas, so the numbers never depend on the model.
 """
 
 import json
-import os
 import re
 
 import pandas as pd
-import requests
 
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
-MODEL_NAME = os.getenv("MODEL_NAME", "qwen2.5:3b")
+from analyzer import llm
+from analyzer.config import CATEGORIES
+
 BATCH_SIZE = 15
-
-CATEGORIES = [
-    "Groceries",
-    "Dining",
-    "Transport",
-    "Rent",
-    "Utilities",
-    "Subscriptions",
-    "Shopping",
-    "Health",
-    "Entertainment",
-    "Income",
-    "Transfers",
-    "Other",
-]
 
 SYSTEM_PROMPT = f"""You categorize bank transaction merchants.
 
@@ -61,22 +45,7 @@ def clean_merchant(description: str) -> str:
 
 def ollama_chat(merchants: list[str]) -> str:
     """Send one batch of merchants to the local model and return its raw reply."""
-    response = requests.post(
-        f"{OLLAMA_URL}/api/chat",
-        json={
-            "model": MODEL_NAME,
-            "stream": False,
-            "format": "json",
-            "options": {"temperature": 0},
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": json.dumps(merchants)},
-            ],
-        },
-        timeout=120,
-    )
-    response.raise_for_status()
-    return response.json()["message"]["content"]
+    return llm.chat(SYSTEM_PROMPT, json.dumps(merchants), json_mode=True, temperature=0)
 
 
 def parse_reply(reply: str) -> dict[str, str]:

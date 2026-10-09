@@ -1,0 +1,19 @@
+[Unit]
+Description=Statement Analyzer (Gradio app)
+After=network-online.target ollama.service
+Wants=ollama.service
+
+[Service]
+User=analyzer
+WorkingDirectory=/opt/statement-analyzer
+Environment=HOST=0.0.0.0
+Environment=PORT=7860
+Environment=OLLAMA_URL=http://localhost:11434
+Environment=MODEL_NAME=qwen2.5:3b
+Environment=GRADIO_ANALYTICS_ENABLED=False
+ExecStart=/opt/statement-analyzer/.venv/bin/python app.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
