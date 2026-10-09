@@ -1,0 +1,56 @@
+# --- Secrets (most important) ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# --- AI models and data (large files) ---
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+*.ckpt
+models/
+weights/
+data/
+datasets/
+*.parquet
+.cache/
+huggingface/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# --- Node / frontend ---
+node_modules/
+.next/
+.vite/
+coverage/
+npm-debug.log*
+
+# --- Logs and databases ---
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+
+# --- OS and editors ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
